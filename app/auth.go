@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
 )
@@ -38,22 +39,22 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusForbidden)
 			w.Header().Add("Content-Type", "application/json")
 			u.Respond(w, response)
+				return
+		}
+
+		splitted := strings.Split(tokenHeader, " ")
+		if len(splitted) != 2 {
+			response = u.Message(false, "Invalid auth token")
+			w.WriteHeader(http.StatusForbidden)
+			w.Header().Add("Content-Type", "application/json")
+			u.Respond(w, response)
 			return
 		}
 
-		// splitted := strings.Split(tokenHeader, " ")
-		// if len(splitted) != 2 {
-		// 	response = u.Message(false, "Invalid auth token")
-		// 	w.WriteHeader(http.StatusForbidden)
-		// 	w.Header().Add("Content-Type", "application/json")
-		// 	u.Respond(w, response)
-		// 	return
-		// }
-
-		// tokenPart := splitted[1]
+		tokenPart := splitted[1]
 		tk := &models.Token{}
 
-		token, err := jwt.ParseWithClaims(tokenHeader, tk, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.ParseWithClaims(tokenPart, tk, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("token_password")), nil
 		})
 
@@ -76,7 +77,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		}
 
-		fmt.Sprintf("user %", tk.UserID)
+		fmt.Printf("user %d", tk.UserID)
 		ctx := context.WithValue(r.Context(), "user", tk.UserID)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)

@@ -21,17 +21,18 @@ func main() {
 		port = "8080"
 	}
 
-	fmt.Println(port)
+	fmt.Printf("Server started on port: %s\n", port)
 
-	router.HandleFunc("/api/user/new", controllers.CreateAccount).Methods("POST")
+	//end points
+	router.HandleFunc("/api/v1/user/", controllers.CreateAccount).Methods("POST")
 
 	router.HandleFunc("/api/user/login", controllers.Authenticate).Methods("POST")
 
-	router.HandleFunc("/api/user/new/profile", controllers.CreateProfile).Methods("POST")
+	router.HandleFunc("/api/v1/user/profile", controllers.CreateProfile).Methods("POST")
 
 	router.HandleFunc("/api/delivery/new", controllers.CreateDelivery).Methods("POST")
 
-	router.HandleFunc("/api/user/{id}", controllers.GetAccountProfile).Methods("GET")
+	router.HandleFunc("/api/v1/user/{id}", controllers.GetAccountProfile).Methods("GET")
 
 	router.HandleFunc("/api/user/deliveries/{id}", controllers.GetDeliveriesFor).Methods("GET")
 

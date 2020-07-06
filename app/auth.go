@@ -77,7 +77,7 @@ var JwtAuthentication = func(next http.Handler) http.Handler {
 			return
 		}
 
-		fmt.Printf("user %d", tk.UserID)
+		fmt.Printf("user %d has valid token\n", tk.UserID) //debug server logs 
 		ctx := context.WithValue(r.Context(), "user", tk.UserID)
 		r = r.WithContext(ctx)
 		next.ServeHTTP(w, r)

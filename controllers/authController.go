@@ -50,8 +50,6 @@ var GetAccountProfile = func(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	id, err := strconv.Atoi(params["id"])
 
-	fmt.Println(id)
-
 	if err != nil {
 		u.Respond(w, u.Message(false, "There was an error in your request"))
 		return

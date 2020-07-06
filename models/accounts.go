@@ -73,7 +73,7 @@ func (account *Account) Create() map[string]interface{} {
 
 	account.Password = ""
 
-	fmt.Printf("Account created in with the email address %s", account.Email) //server logs
+	fmt.Printf("Account created in with the email address %s\n", account.Email) //server logs
 	response := u.Message(true, "Account created successfully")
 	response["account"] = account
 
@@ -105,7 +105,7 @@ func Login(email, password string) map[string]interface{} {
 	tokenString, _ := token.SignedString([]byte(os.Getenv("token_password")))
 	account.Token = tokenString
 
-	fmt.Printf("Account logged in with the email address %s", account.Email)
+	fmt.Printf("Account logged in with the email address %s\n", account.Email) //server logs
 	resp := u.Message(true, "Logged In")
 	resp["account"] = account
 	return resp
